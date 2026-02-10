@@ -1,0 +1,34 @@
+@import url('https://fonts.googleapis.com/css2?family=Pinyon+Script&display=swap');
+
+/* Ajustes globales */
+* {
+    font-family: 'Pinyon Script', cursive;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Fondo de Estrellas */
+/* Color solido */
+#escenario {
+    position: relative;
+    /* Crea un marco de referencia para los hijos */
+    width: 100vw;
+    height: 100vh;
+    background: radial-gradient(circle, #1b2735 0%, #090a0f 100%);
+    overflow: hidden;
+}
+
+/* Estrellas */
+#particles-js {
+    position: absolute;
+    /* Flota sobre el fondo */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    /* Capa inferior a la del pergamino */
+}
+
+/* Aquí iría tu futuro pergamino con un z-index: 2 */
