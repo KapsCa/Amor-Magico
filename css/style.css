@@ -17,6 +17,7 @@
     height: 100vh;
     background: radial-gradient(circle, #1b2735 0%, #090a0f 100%);
     overflow: hidden;
+    perspective: 1000px;
 }
 
 /* Estrellas */
@@ -31,4 +32,79 @@
     /* Capa inferior a la del pergamino */
 }
 
-/* Aquí iría tu futuro pergamino con un z-index: 2 */
+/* Pergamino */
+#pergamino-contenedor {
+    position: absolute;
+    /* 1. Cambiamos bottom/right por top/left en 0 */
+    top: 0;
+    left: 0;
+
+    width: 70px;
+    height: 70px;
+    background-color: #bb8d49;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 15px rgba(212, 180, 131, 0.5);
+
+    /* 2. Dejamos solo una transición para el transform */
+    /* transition: transform 0.6s ease-in-out;  */
+    transition: transform 0.5s cubic-bezier(0.45, 0.05, 0.55, 0.95);
+    /* 3. Estado inicial: fuera de la pantalla (opcional para la entrada) */
+    transform: translate(-100px, -100px);
+}
+
+#pergamino-contenedor.snitch-mode {
+    width: 40px;
+    height: 40px;
+    background: radial-gradient(circle, #ffd700, #b8860b);
+    border-radius: 50%;
+    position: absolute;
+    transition: all 0.6s ease-in-out;
+    /* Controla la suavidad del vuelo */
+    box-shadow: 0 0 20px #ffcc00;
+}
+
+/* Clase que activaremos con JS */
+#pergamino-contenedor.abierto {
+    width: 90vw;
+    height: 80vh;
+    right: 5vw;
+    bottom: 10vh;
+    border-radius: 10px;
+    background-color: #f9ca53;
+}
+
+/* snitch */
+/* La animación ahora NO usa transform, así no pisa a JS */
+@keyframes levitacionMagica {
+
+    0%,
+    100% {
+        margin-top: 0px;
+        margin-left: 0px;
+    }
+
+    25% {
+        margin-top: 4px;
+        margin-left: -2px;
+    }
+
+    50% {
+        margin-top: -2px;
+        margin-left: 4px;
+    }
+
+    75% {
+        margin-top: 3px;
+        margin-left: 2px;
+    }
+}
+
+.observando {
+    /* Ejecuta el temblor de forma independiente */
+    animation: levitacionMagica 0.3s ease-in-out infinite;
+}
