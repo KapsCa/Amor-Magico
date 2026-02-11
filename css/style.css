@@ -108,3 +108,78 @@
     /* Ejecuta el temblor de forma independiente */
     animation: levitacionMagica 0.3s ease-in-out infinite;
 }
+
+/* Transformacion de snitch a pergamino */
+/* Fase 1: Acercamiento y Zoom */
+/* Fase 1: Acercamiento con "rebote" */
+.capturada {
+    top: 50% !important;
+    left: 50% !important;
+    /* La hacemos más grande (scale 3) y la centramos */
+    transform: translate(-50%, -50%) scale(3) !important;
+    /* Esta transición es la clave del movimiento vivo */
+    transition: all 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55) !important;
+}
+
+/* Fase 2: Patrulleo en cortito (Hovering intenso) */
+@keyframes dudaMágica {
+    0% { 
+        translate: 0px 0px;
+        rotate: 0deg;
+    }
+    25% { 
+        translate: 5px -8px;
+        rotate: 5deg;
+    }
+    50% { 
+        translate: -5px 4px;
+        rotate: -3deg;
+    }
+    75% { 
+        translate: 8px 2px;
+        rotate: 2deg;
+    }
+    100% { 
+        translate: 0px 0px;
+        rotate: 0deg;
+    }
+}
+
+.curiosa {
+    /* Aplicamos el movimiento de duda de forma infinita */
+    animation: dudaMágica 1.5s ease-in-out infinite;
+    /* Aseguramos que el centro de rotación sea el medio */
+    transform-origin: center;
+}
+
+/* Fase 3: El "Puf" (Desvanecimiento de la Snitch) */
+.desaparecer {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0) !important;
+    transition: all 0.3s ease-in;
+}
+
+/* El contenedor del humo que crearemos con JS */
+.particula-humo {
+    position: absolute;
+    background: rgba(200, 200, 200, 0.6);
+    /* Gris humo */
+    border-radius: 50%;
+    pointer-events: none;
+    /* Que no estorbe al hacer clic */
+    z-index: 15;
+    animation: expansionHumo 0.8s ease-out forwards;
+}
+
+@keyframes expansionHumo {
+    0% {
+        transform: translate(0, 0) scale(0.5);
+        opacity: 1;
+    }
+
+    100% {
+        /* Usamos las variables de JS para la dirección */
+        transform: translate(var(--moveX), var(--moveY)) scale(2.5);
+        opacity: 0;
+    }
+}
