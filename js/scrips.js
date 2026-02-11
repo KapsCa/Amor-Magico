@@ -55,28 +55,41 @@ function configurarPergamino() {
             // 1. Limpieza y Humo
             crearExplosionHumo(contenedor);
 
-            contenedor.style.transform = '';
+            // LIMPIEZA TOTAL: Borramos cualquier estilo inline que haya dejado el vuelo
+            contenedor.removeAttribute('style');
+
+            // Borramos todas las clases anteriores (snitch, capturada, curiosa, etc.)
             contenedor.className = '';
+
+            // Aseguramos el ID
             contenedor.id = 'pergamino-contenedor';
 
             // 2. APARECE EL ROLLO CERRADO
-            // Gracias al CSS, aparecerá centrado y rotado (-30deg) para verse recto
             contenedor.classList.add('pergamino-cerrado');
 
+            // 3. LA APERTURA MÁGICA (800ms después)
+            // ... dentro de configurarPergamino ...
+
             // 3. LA APERTURA MÁGICA
-            // Esperamos un poquito para que el usuario vea el rollo cerrado (800ms)
             setTimeout(() => {
-                // Quitamos la clase de cerrado y ponemos la de abierto
-                // El CSS hará la transición: 
-                // Girará de -30deg a 0deg y cambiará de tamaño suavemente
                 contenedor.classList.remove('pergamino-cerrado');
                 contenedor.classList.add('pergamino-abierto');
 
                 console.log("📜 Pergamino desplegado");
 
-                // Aquí podrías disparar la función para escribir el texto
+                // --- NUEVO CÓDIGO AQUÍ ---
 
-            }, 800);
+                // 1. Creamos el contenedor del texto dinámicamente
+                const divTexto = document.createElement('div');
+                divTexto.id = 'mensaje-carta';
+                contenedor.appendChild(divTexto);
+
+                // 2. Esperamos a que el papel termine de abrirse (1.2s del CSS)
+                setTimeout(() => {
+                    escribirMensaje(divTexto);
+                }, 1200);
+
+            }, 800);;
 
         }, 3200);
     });
@@ -121,12 +134,20 @@ function patrullarSnitch() {
 
 function entradaMagica() {
     const pergamino = document.getElementById('pergamino-contenedor');
+
+    // Esperamos 1 segundo para crear suspenso... el escenario está vacío...
     setTimeout(() => {
-        const x = Math.random() * (window.innerWidth / 2);
-        const y = Math.random() * (window.innerHeight / 2);
+        // Coordenadas de entrada (un punto visible en el escenario)
+        // Usamos valores aleatorios para que no siempre entre al mismo lugar
+        const x = Math.random() * (window.innerWidth - 100) + 50;
+        const y = Math.random() * (window.innerHeight - 100) + 50;
+
+        // ¡Entra volando! (CSS hará la transición desde -150px hasta aquí)
         pergamino.style.transform = `translate(${x}px, ${y}px)`;
-        setTimeout(patrullarSnitch, 1000);
-    }, 500);
+
+        // Una vez que llega, comienza a patrullar
+        setTimeout(patrullarSnitch, 1500); // 1.5s coincide con la transición CSS
+    }, 1000);
 }
 
 function crearExplosionHumo(target) {
@@ -158,6 +179,33 @@ function crearExplosionHumo(target) {
         // Limpiamos el DOM eliminando el humo tras la animación
         setTimeout(() => humo.remove(), 800);
     }
+}
+// Función para el efecto de máquina de escribir
+function escribirMensaje(elemento) {
+    // 💌 TU MENSAJE AQUÍ 💌
+    // Usa \n para saltos de línea
+    const mensaje = "Juro solemnemente que mis intenciones no son buenas...\n\n¿Quieres ser mi San Valentín?\n\nTravesura Realizada.";
+
+    elemento.style.opacity = 1; // Hacemos visible el contenedor
+    elemento.innerHTML = ""; // Limpiamos por si acaso
+
+    let i = 0;
+    const velocidad = 50; // Milisegundos por letra (ajusta para más rápido/lento)
+
+    function escribir() {
+        if (i < mensaje.length) {
+            // Si es un salto de línea, usamos <br>, si no, la letra
+            if (mensaje.charAt(i) === '\n') {
+                elemento.innerHTML += '<br>';
+            } else {
+                elemento.innerHTML += mensaje.charAt(i);
+            }
+            i++;
+            setTimeout(escribir, velocidad);
+        }
+    }
+
+    escribir();
 }
 
 document.addEventListener("DOMContentLoaded", () => {

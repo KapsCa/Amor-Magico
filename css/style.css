@@ -37,58 +37,73 @@
     position: absolute;
     top: 0;
     left: 0;
-    width: 60px; /* Un poco más pequeña para que las alas destaquen */
+    width: 60px;
+    /* Un poco más pequeña para que las alas destaquen */
     height: 60px;
     border-radius: 50%;
     cursor: pointer;
     z-index: 10;
-    
+    /* AGREGA ESTO: La mandamos fuera de la pantalla (arriba a la izquierda) */
+    transform: translate(-150px, -150px);
+
+    /* Aseguramos que la transición esté lista para la entrada suave */
+    transition: transform 1.5s cubic-bezier(0.25, 1, 0.5, 1);
     /* --- TU NUEVA IMAGEN AQUÍ --- */
     /* Reemplaza esta URL por la imagen de la ESFERA SOLA que editaste */
-    background-image: url('../img/snitch_cuerpo.png'); /* <-- TU IMAGEN AQUÍ */
+    background-image: url('../img/snitch_cuerpo.png');
+    /* <-- TU IMAGEN AQUÍ */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    
+
     /* Mantenemos el brillo dorado */
     box-shadow: 0 0 20px rgba(255, 215, 0, 0.6), inset 0 0 10px rgba(255, 255, 200, 0.4);
 
     /* Es vital que NO tenga overflow:hidden para que las alas se vean */
     overflow: visible;
     transition: transform 0.5s cubic-bezier(0.45, 0.05, 0.55, 0.95);
-    
+
     /* Esto es importante para la perspectiva 3D de las alas */
     transform-style: preserve-3d;
 }
+
 /* --- LAS ALAS (DISEÑO MEJORADO) --- */
 .ala {
     position: absolute;
-    width: 85px;  /* Un poco más largas para más elegancia */
-    height: 14px; /* Un poco más anchas */
-    
+    width: 85px;
+    /* Un poco más largas para más elegancia */
+    height: 14px;
+    /* Un poco más anchas */
+
     /* --- NUEVA POSICIÓN: MÁS ARRIBA --- */
-    top: 25%; /* Nacen en el cuarto superior del cuerpo */
+    top: 25%;
+    /* Nacen en el cuarto superior del cuerpo */
     /* Eliminamos el margin-top que las centraba antes */
-    
+
     /* Forma de ala más estilizada y puntiaguda */
     border-radius: 100% 10% 40% 5% / 50% 10% 50% 10%;
-    
+
     /* --- NUEVO COLOR: DORADO TRANSLÚCIDO Y METÁLICO --- */
     /* Usamos RGBA para colores ricos pero transparentes internamente */
-    background: linear-gradient(
-        to right, 
-        rgba(139, 94, 27, 0.8) 0%,   /* Bronce oscuro en la base */
-        rgba(212, 175, 55, 0.8) 40%, /* Oro viejo en el medio */
-        rgba(255, 236, 168, 0.6) 80%,/* Reflejo pálido en la punta */
-        rgba(139, 94, 27, 0.5) 100%  /* Punta oscura y transparente */
-    );
-    
+    background: linear-gradient(to right,
+            rgba(139, 94, 27, 0.8) 0%,
+            /* Bronce oscuro en la base */
+            rgba(212, 175, 55, 0.8) 40%,
+            /* Oro viejo en el medio */
+            rgba(255, 236, 168, 0.6) 80%,
+            /* Reflejo pálido en la punta */
+            rgba(139, 94, 27, 0.5) 100%
+            /* Punta oscura y transparente */
+        );
+
     /* --- TRANSLUCIDEZ GENERAL --- */
-    opacity: 0.6; /* Hace que toda el ala sea semitransparente */
-    
+    opacity: 0.6;
+    /* Hace que toda el ala sea semitransparente */
+
     /* Un borde sutil para definir la forma */
     border: 1px solid rgba(255, 215, 0, 0.3);
-    box-shadow: inset 0 0 5px rgba(0,0,0,0.2); /* Sombra interna para volumen */
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+    /* Sombra interna para volumen */
 
     transform-style: preserve-3d;
     /* La animación ahora es más rápida y vibrante (0.06s) */
@@ -97,29 +112,31 @@
 
 /* --- ALA IZQUIERDA --- */
 .ala-izquierda {
-    left: -75px; /* Ajustamos la posición horizontal */
-    
+    left: -75px;
+    /* Ajustamos la posición horizontal */
+
     /* PUNTO DE ANCLAJE (CRUCIAL): 
        'right' = se pega al cuerpo.
        '70%'   = el eje está en la parte baja del ala, no en el centro.
        Esto hace que al estar arriba, bata "hacia abajo" naturalmente.
     */
-    transform-origin: right 70%; 
-    
+    transform-origin: right 70%;
+
     /* Inclinación base inicial hacia abajo */
     transform: rotateZ(15deg);
 }
 
 /* --- ALA DERECHA --- */
 .ala-derecha {
-    right: -75px; /* Ajustamos la posición horizontal */
-    
+    right: -75px;
+    /* Ajustamos la posición horizontal */
+
     /* Punto de anclaje simétrico */
-    transform-origin: left 70%; 
-    
+    transform-origin: left 70%;
+
     /* Inclinación base inicial hacia abajo (negativa) */
     transform: rotateZ(-15deg);
-    
+
     /* Invertimos la animación */
     animation-direction: alternate-reverse;
 }
@@ -131,12 +148,14 @@
         /* Usamos rotate3d para un movimiento más complejo */
         transform: rotateZ(15deg) rotateY(10deg);
     }
+
     100% {
         /* Estado "arriba": Batida fuerte hacia arriba y atrás */
         /* El cambio en rotateZ (-10deg) hace que la punta suba */
         transform: rotateZ(-10deg) rotateY(55deg);
     }
 }
+
 /* NOTA PARA LA DERECHA: El navegador invierte automáticamente estos valores 
    gracias a 'alternate-reverse' y la simetría, no hace falta otro keyframe. */
 
@@ -191,60 +210,73 @@
     /* Ejecuta el temblor de forma independiente */
     animation: levitacionMagica 0.3s ease-in-out infinite;
 }
-/* --- ESTILOS DEL PERGAMINO (CORREGIDO) --- */
 
-#pergamino-contenedor.pergamino-cerrado, 
+/* --- REGLA PARA OCULTAR ALAS --- */
+/* Esta regla es vital: Si tiene clase de pergamino, las alas desaparecen */
+#pergamino-contenedor.pergamino-cerrado .ala,
+#pergamino-contenedor.pergamino-abierto .ala {
+    display: none !important;
+    opacity: 0 !important;
+}
+
+/* --- ESTILOS DEL PERGAMINO (CORREGIDO TÉCNICO) --- */
+#pergamino-contenedor.pergamino-cerrado,
 #pergamino-contenedor.pergamino-abierto {
     top: 50% !important;
     left: 50% !important;
     z-index: 100;
-    
-    /* Quitamos el borde sólido, dejamos que la imagen mande */
+
+    /* 1. CORRECCIÓN DE FORMA: Matamos el círculo */
+    border-radius: 5px !important;
+    /* Esquinas apenas redondeadas, no 50% */
+
+    /* 2. CORRECCIÓN DE BRILLO: Quitamos el aura dorada de la Snitch */
+    box-shadow: none !important;
+    filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.5));
+    /* Sombra natural de objeto */
+
+    /* Quitamos el borde sólido y aseguramos que la imagen mande */
     border: none !important;
     background-position: center;
     background-repeat: no-repeat;
-    
-    /* IMPORTANTE: contain hace que la imagen no se deforme/aplaste */
-    background-size: contain; 
+
+    /* Aseguramos que la imagen se ajuste bien */
+    background-size: contain;
 }
 
 /* ESTADO 1: El rollo cerrado */
 #pergamino-contenedor.pergamino-cerrado {
-    /* Dimensiones naturales para que la imagen se vea bien (no aplastada) */
-    width: 300px !important;   
-    height: 300px !important;  
-    
+    width: 300px !important;
+    height: 300px !important;
+
     /* TU IMAGEN DEL ROLLO */
-    background-image: url('../img/pergamino_cerrado.png'); /* Asegúrate de que la ruta sea correcta */
-    
-    /* TRUCO DE MAGIA: 
-       Como la imagen está inclinada, rotamos el div -30deg para enderezarla visualmente.
-       translate(-50%, -50%) mantiene el centro.
-    */
+    background-image: url('../img/pergamino_cerrado.png');
+
+    /* Mantenemos la rotación para corregir la inclinación de tu imagen */
     transform: translate(-50%, -50%) rotate(-30deg) !important;
-    
-    /* Sombra suave que sigue la forma */
-    filter: drop-shadow(10px 10px 20px rgba(0,0,0,0.5));
-    
+
     transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
 /* ESTADO 2: El rollo abierto */
 #pergamino-contenedor.pergamino-abierto {
-    /* Ahora sí ocupamos la pantalla */
+    /* Dimensiones rectangulares para la carta */
     width: 80vw !important;
     height: 75vh !important;
-    
+
     /* TU IMAGEN DEL PAPEL ABIERTO */
-    background-image: url('../img/pergamino_abierto.png'); /* Tu imagen de textura vacía */
-    background-size: 100% 100%; /* Aquí sí queremos que llene todo */
-    
-    /* Reseteamos la rotación a 0 para que la carta se lea recta */
+    background-image: url('../img/pergamino_abierto.png');
+    background-size: 100% 100% !important;
+    /* Forzamos a llenar el cuadro */
+
+    /* Reseteamos rotación y aseguramos que no sea ovalado */
     transform: translate(-50%, -50%) rotate(0deg) !important;
-    
-    filter: drop-shadow(0 20px 50px rgba(0,0,0,0.8));
+    border-radius: 10px !important;
+    /* Un poco de borde suave para el papel */
+
     transition: all 1.2s ease-out;
 }
+
 /* Transformacion de snitch a pergamino */
 /* Fase 1: Acercamiento y Zoom */
 /* Fase 1: Acercamiento con "rebote" */
@@ -322,4 +354,36 @@
         transform: translate(var(--moveX), var(--moveY)) scale(2.5);
         opacity: 0;
     }
+}
+
+/* --- EL CONTENIDO DE LA CARTA --- */
+#mensaje-carta {
+    position: absolute;
+    top: 15%;
+    /* Margen superior para librar el borde del papel */
+    left: 15%;
+    /* Márgenes laterales */
+    width: 70%;
+    height: 70%;
+
+    /* Tipografía mágica */
+    font-family: 'Pinyon Script', cursive;
+    font-size: 2rem;
+    /* Tamaño legible */
+    color: #4a3b2a;
+    /* Color tinta sepia/café */
+    text-align: center;
+    /* O 'justify' si es mucho texto */
+    line-height: 1.6;
+
+    /* Oculto al principio */
+    opacity: 0;
+    transition: opacity 1s ease-in;
+    z-index: 200;
+
+    /* Para que el texto largo no se salga */
+    overflow-y: auto;
+
+    /* Personalización de la barra de scroll (opcional, estilo invisible) */
+    scrollbar-width: none;
 }
