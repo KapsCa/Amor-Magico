@@ -47,17 +47,36 @@ function configurarPergamino() {
         }, 1200);
 
         // PASO 3: El gran final. Le damos 2 segundos de "duda" para crear tensión
+        // ... dentro del setTimeout de 3200ms (el del Puf) ...
+
+        // ... dentro del setTimeout de 3200ms (después del humo) ...
+
         setTimeout(() => {
-            contenedor.classList.remove('curiosa');
-            contenedor.classList.add('desaparecer');
+            // 1. Limpieza y Humo
+            crearExplosionHumo(contenedor);
 
-            crearExplosionHumo(contenedor); // ¡Puf! 💨
+            contenedor.style.transform = '';
+            contenedor.className = '';
+            contenedor.id = 'pergamino-contenedor';
 
+            // 2. APARECE EL ROLLO CERRADO
+            // Gracias al CSS, aparecerá centrado y rotado (-30deg) para verse recto
+            contenedor.classList.add('pergamino-cerrado');
+
+            // 3. LA APERTURA MÁGICA
+            // Esperamos un poquito para que el usuario vea el rollo cerrado (800ms)
             setTimeout(() => {
-                contenedor.classList.remove('capturada', 'desaparecer');
-                contenedor.classList.add('abierto');
-                // Aquí iniciaremos la escritura de la carta 📜
-            }, 500);
+                // Quitamos la clase de cerrado y ponemos la de abierto
+                // El CSS hará la transición: 
+                // Girará de -30deg a 0deg y cambiará de tamaño suavemente
+                contenedor.classList.remove('pergamino-cerrado');
+                contenedor.classList.add('pergamino-abierto');
+
+                console.log("📜 Pergamino desplegado");
+
+                // Aquí podrías disparar la función para escribir el texto
+
+            }, 800);
 
         }, 3200);
     });
