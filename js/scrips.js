@@ -32,66 +32,50 @@ function configurarPergamino() {
     const contenedor = document.getElementById('pergamino-contenedor');
 
     contenedor.addEventListener('click', () => {
-        if (!snitchActiva) return; // Evita múltiples clics
+        if (!snitchActiva) return;
+        snitchActiva = false;
 
-        snitchActiva = false; // Detenemos el vuelo inmediatamente
+        // --- CORRECCIÓN AQUÍ ---
+        // 1. Limpiamos la posición de vuelo manual para que el CSS (.capturada) tome el control
+        contenedor.style.transform = '';
 
-        // PASO 1: Acercamiento (Zoom)
+        // 2. Añadimos la clase que la lleva al centro y hace zoom
         contenedor.classList.add('capturada');
-        console.log("¡Atrapada! Iniciando acercamiento...");
 
+        console.log("¡Atrapada! Centrando...");
+
+        // ... el resto de tu código sigue igual ...
         // PASO 2: Después de un breve momento (300ms), empieza a temblar de curiosidad
+        console.log("¡Transformación!");
+
+        // FASE 1: Puf de humo y Snitch se va
+        crearExplosionHumo(contenedor);
+        contenedor.classList.add('estado-captura'); // CSS oculta la snitch
+
+        // FASE 2: Aparece el Rollo (inmediatamente después del humo)
         setTimeout(() => {
-            contenedor.classList.add('curiosa'); // Aquí empieza el "baile" lento
-            console.log("La Snitch duda...");
-        }, 1200);
+            contenedor.classList.add('estado-rollo');
+        }, 200);
 
-        // PASO 3: El gran final. Le damos 2 segundos de "duda" para crear tensión
-        // ... dentro del setTimeout de 3200ms (el del Puf) ...
-
-        // ... dentro del setTimeout de 3200ms (después del humo) ...
-
+        // FASE 3: Se abre la hoja
         setTimeout(() => {
-            // 1. Limpieza y Humo
-            crearExplosionHumo(contenedor);
+            // --- CORRECCIÓN AQUÍ ---
+            // 1. Quitamos el "Zoom de Captura" (scale 1.5)
+            contenedor.classList.remove('capturada');
 
-            // LIMPIEZA TOTAL: Borramos cualquier estilo inline que haya dejado el vuelo
-            contenedor.removeAttribute('style');
+            // 2. Activamos el "Modo Lectura" (scale 1)
+            // Esto hará que el pergamino se achique suavemente a su tamaño normal
+            // y eliminará el temblor causado por el renderizado forzado
+            contenedor.classList.add('modo-lectura');
 
-            // Borramos todas las clases anteriores (snitch, capturada, curiosa, etc.)
-            contenedor.className = '';
+            contenedor.classList.add('estado-abierto'); // CSS muestra la hoja y oculta el rollo
 
-            // Aseguramos el ID
-            contenedor.id = 'pergamino-contenedor';
-
-            // 2. APARECE EL ROLLO CERRADO
-            contenedor.classList.add('pergamino-cerrado');
-
-            // 3. LA APERTURA MÁGICA (800ms después)
-            // ... dentro de configurarPergamino ...
-
-            // 3. LA APERTURA MÁGICA
+            // Iniciar escritura
+            const divTexto = document.getElementById('mensaje-carta');
             setTimeout(() => {
-                contenedor.classList.remove('pergamino-cerrado');
-                contenedor.classList.add('pergamino-abierto');
-
-                console.log("📜 Pergamino desplegado");
-
-                // --- NUEVO CÓDIGO AQUÍ ---
-
-                // 1. Creamos el contenedor del texto dinámicamente
-                const divTexto = document.createElement('div');
-                divTexto.id = 'mensaje-carta';
-                contenedor.appendChild(divTexto);
-
-                // 2. Esperamos a que el papel termine de abrirse (1.2s del CSS)
-                setTimeout(() => {
-                    escribirMensaje(divTexto);
-                }, 1200);
-
-            }, 800);;
-
-        }, 3200);
+                escribirMensaje(divTexto);
+            }, 1000);
+        }, 1500); // Tiempo para admirar el rollo cerrado
     });
 }
 
