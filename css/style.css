@@ -62,13 +62,17 @@
     transform: translate(-50%, -50%);
     width: 60px;
     height: 60px;
-    border-radius: 50%;
 
+    /* IMPORTANTE: Quitamos border-radius y box-shadow de la caja */
+    /* border-radius: 50%; <--- Ya no es necesario para la forma */
     background-image: url('../img/snitch_cuerpo.png');
     background-size: cover;
-    box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
 
-    /* Transición suave para desaparecer */
+    /* CORRECCIÓN: Usamos drop-shadow en lugar de box-shadow */
+    /* Esto hará que el brillo nazca de la piel de la snitch, no de un círculo imaginario */
+    box-shadow: none !important;
+    filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.8));
+
     transition: opacity 0.5s ease, transform 0.5s ease;
     opacity: 1;
     z-index: 30;
@@ -79,19 +83,18 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    /* Truco: Lo rotamos y escalamos desde el inicio */
     transform: translate(-50%, -50%) rotate(-30deg) scale(0);
     width: 300px;
     height: auto;
-    /* Mantiene proporción original */
 
     opacity: 0;
-    /* Invisible al inicio */
     transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     z-index: 20;
 
-    /* Sombra solo a la silueta (PNG limpio) */
-    filter: drop-shadow(10px 10px 15px rgba(0, 0, 0, 0.5));
+    /* CORRECCIÓN: Aseguramos que no haya box-shadow y aplicamos el filtro */
+    box-shadow: none !important;
+    /* drop-shadow detectará la diagonal del rollo y la cuerda perfectamente */
+    filter: drop-shadow(10px 10px 15px rgba(0, 0, 0, 0.6));
 }
 
 /* --- CAPA 3: HOJA ABIERTA --- */
@@ -100,9 +103,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%) scale(0.1);
-    /* Empieza pequeña */
 
-    /* TAMAÑO FINAL DE LA CARTA */
     width: 85vw;
     height: 80vh;
 
@@ -111,9 +112,11 @@
     opacity: 0;
     z-index: 10;
 
-    /* Transición elegante de apertura */
     transition: all 1.2s cubic-bezier(0.25, 1, 0.5, 1);
-    filter: drop-shadow(0 20px 50px rgba(0, 0, 0, 0.6));
+
+    /* CORRECCIÓN: Sombra ajustada a la textura del papel */
+    box-shadow: none !important;
+    filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.8));
 }
 
 /* --- ESTADOS DE LA ANIMACIÓN --- */
@@ -471,6 +474,7 @@
     /* Personalización de la barra de scroll (opcional, estilo invisible) */
     scrollbar-width: none;
 }
+
 /* --- NUEVO ESTADO: MODO LECTURA --- */
 /* Esta clase reemplazará a '.capturada' cuando se abra el pergamino */
 .modo-lectura {
@@ -478,7 +482,7 @@
     left: 50% !important;
     /* Regresamos a la escala 1 (tamaño real) para que no se vea gigante */
     /* Mantenemos el centrado perfecto */
-    transform: translate(-50%, -50%) scale(1) !important; 
+    transform: translate(-50%, -50%) scale(1) !important;
     z-index: 200 !important;
     /* Transición suave para que el "zoom out" se vea elegante */
     transition: transform 1s ease-in-out;
