@@ -426,7 +426,7 @@
     border-radius: 50%;
     pointer-events: none;
     /* Que no estorbe al hacer clic */
-    z-index: 15;
+    z-index: 300;
     animation: expansionHumo 0.8s ease-out forwards;
 }
 

@@ -35,47 +35,54 @@ function configurarPergamino() {
         if (!snitchActiva) return;
         snitchActiva = false;
 
-        // --- CORRECCIÓN AQUÍ ---
-        // 1. Limpiamos la posición de vuelo manual para que el CSS (.capturada) tome el control
-        contenedor.style.transform = '';
-
-        // 2. Añadimos la clase que la lleva al centro y hace zoom
-        contenedor.classList.add('capturada');
-
+        // 1. DETENER Y CENTRAR (Zoom)
+        // Limpiamos la transformación de vuelo para que el CSS tome el control
+        contenedor.style.transform = ''; 
+        contenedor.classList.remove('observando'); // Quitamos el aleteo de vuelo
+        contenedor.classList.add('capturada'); // Zoom al 150% y centrado
+        
         console.log("¡Atrapada! Centrando...");
 
-        // ... el resto de tu código sigue igual ...
-        // PASO 2: Después de un breve momento (300ms), empieza a temblar de curiosidad
-        console.log("¡Transformación!");
-
-        // FASE 1: Puf de humo y Snitch se va
-        crearExplosionHumo(contenedor);
-        contenedor.classList.add('estado-captura'); // CSS oculta la snitch
-
-        // FASE 2: Aparece el Rollo (inmediatamente después del humo)
+        // 2. LA DUDA (Opcional pero recomendado)
+        // 800ms después de atraparla, empieza a temblar
         setTimeout(() => {
-            contenedor.classList.add('estado-rollo');
-        }, 200);
+             contenedor.classList.add('curiosa');
+        }, 800);
 
-        // FASE 3: Se abre la hoja
+        // 3. LA TRANSFORMACIÓN (2 segundos después del click)
         setTimeout(() => {
-            // --- CORRECCIÓN AQUÍ ---
-            // 1. Quitamos el "Zoom de Captura" (scale 1.5)
-            contenedor.classList.remove('capturada');
+            console.log("¡Transformación!");
+            
+            // Quitamos el temblor antes de explotar
+            contenedor.classList.remove('curiosa');
 
-            // 2. Activamos el "Modo Lectura" (scale 1)
-            // Esto hará que el pergamino se achique suavemente a su tamaño normal
-            // y eliminará el temblor causado por el renderizado forzado
-            contenedor.classList.add('modo-lectura');
+            // FASE 1: Puf de humo y Snitch desaparece
+            crearExplosionHumo(contenedor);
+            contenedor.classList.add('estado-captura'); 
 
-            contenedor.classList.add('estado-abierto'); // CSS muestra la hoja y oculta el rollo
-
-            // Iniciar escritura
-            const divTexto = document.getElementById('mensaje-carta');
+            // FASE 2: Aparece el Rollo (200ms después del humo)
             setTimeout(() => {
-                escribirMensaje(divTexto);
-            }, 1000);
-        }, 1500); // Tiempo para admirar el rollo cerrado
+                contenedor.classList.add('estado-rollo');
+            }, 200);
+
+            // FASE 3: Se abre la hoja (1.5s después para que luzca el rollo)
+            setTimeout(() => {
+                // CAMBIO DE ZOOM: De gigante (captura) a normal (lectura)
+                contenedor.classList.remove('capturada'); 
+                contenedor.classList.add('modo-lectura'); 
+                
+                // Transición visual a hoja abierta
+                contenedor.classList.add('estado-abierto'); 
+
+                // Iniciar escritura del texto
+                const divTexto = document.getElementById('mensaje-carta');
+                setTimeout(() => {
+                    escribirMensaje(divTexto);
+                }, 1000);
+
+            }, 1500); 
+
+        }, 2000); // TIEMPO TOTAL DE LA SNITCH ATRAPADA (2 segundos)
     });
 }
 
