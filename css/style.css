@@ -532,6 +532,146 @@
     /* Transición suave para que el "zoom out" se vea elegante */
     transition: transform 1s ease-in-out;
 }
+
+/* --- AGREGAR AL FINAL DE TU CSS --- */
+
+/* Contenedor de la constelación */
+#contenedor-constelacion {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 500;
+    pointer-events: none; 
+}
+
+/* Capa para las líneas que unen las estrellas */
+#svg-lineas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 499; /* Justo debajo de las estrellas */
+    overflow: visible;
+}
+
+.linea-conexion {
+    stroke: rgba(255, 215, 0, 0.4); /* Línea dorada tenue */
+    stroke-width: 2;
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    animation: dibujarLinea 2s forwards;
+}
+
+@keyframes dibujarLinea {
+    to { stroke-dashoffset: 0; }
+}
+
+/* NUEVO DISEÑO: SPARK (Destello) */
+.estrella-historia {
+    position: absolute;
+    width: 30px; /* Un poco más grandes para que luzca la forma */
+    height: 30px;
+    background: white;
+    
+    /* ESTO CREA LA FORMA DE DESTELLO DE 4 PUNTAS */
+    clip-path: polygon(50% 0%, 60% 40%, 100% 50%, 60% 60%, 50% 100%, 40% 60%, 0% 50%, 40% 40%);
+    
+    cursor: pointer;
+    pointer-events: auto;
+    transform: translate(-50%, -50%) scale(0);
+    
+    /* El box-shadow no funciona con clip-path, usamos filter */
+    filter: drop-shadow(0 0 5px white);
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Estado: Activa (latido más intenso) */
+.estrella-historia.activa {
+    background: #ffd700;
+    filter: drop-shadow(0 0 10px #ffd700);
+    z-index: 502;
+    animation: latidoSpark 1.5s infinite alternate;
+}
+
+@keyframes latidoSpark {
+    0% { transform: translate(-50%, -50%) scale(1); filter: drop-shadow(0 0 5px #ffd700); }
+    100% { transform: translate(-50%, -50%) scale(1.4); filter: drop-shadow(0 0 15px #ffd700); }
+}
+
+/* Estado: Visitada */
+.estrella-historia.visitada {
+    background: #fff;
+    opacity: 0.8;
+    filter: drop-shadow(0 0 2px white);
+    animation: none;
+}
+
+/* Tarjeta del recuerdo (Popup) */
+.tarjeta-recuerdo {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    width: 80%;
+    max-width: 350px;
+    background: rgba(20, 20, 30, 0.95);
+    border: 1px solid #ffd700;
+    border-radius: 15px;
+    padding: 20px;
+    z-index: 1000;
+    color: #fff;
+    text-align: center;
+    box-shadow: 0 0 50px rgba(0,0,0,0.8);
+    transition: transform 0.4s ease;
+    pointer-events: auto;
+}
+
+.tarjeta-recuerdo.abierta {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.tarjeta-recuerdo img {
+    width: 100%;
+    max-height: 200px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+.tarjeta-recuerdo h3 {
+    font-family: 'Pinyon Script', cursive;
+    font-size: 2rem;
+    color: #ffd700;
+    margin-bottom: 10px;
+}
+
+.tarjeta-recuerdo p {
+    font-family: sans-serif;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: #ddd;
+    margin-bottom: 15px;
+}
+
+.cerrar-tarjeta {
+    background: transparent;
+    border: 1px solid #fff;
+    color: #fff;
+    padding: 8px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-family: sans-serif;
+    transition: all 0.3s;
+}
+
+.cerrar-tarjeta:hover {
+    background: rgba(255,255,255,0.2);
+}
+
 /* --- RESPONSIVIDAD (MÓVILES) --- */
 @media (max-width: 600px) {
     /* Hacemos el pergamino más ancho en móviles para tener más espacio */
