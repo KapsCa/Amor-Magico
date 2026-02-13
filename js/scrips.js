@@ -1,21 +1,31 @@
-// --- CONFIGURACIÓN DE LA HISTORIA (ESPIRAL ÁUREA) ---
-// Coordenadas ajustadas para parecer un remolino desde el centro
+// --- CONFIGURACIÓN DE LA HISTORIA (ESPIRAL SUAVE) ---
 const historia = [
-    { id: 0, x: 50, y: 50, mensaje: "El Origen...", fecha: "202X", foto: "img/foto1.jpg" }, // Centro
-    { id: 1, x: 55, y: 43, mensaje: "Primeros pasos", fecha: "202X", foto: "img/foto2.jpg" }, // Arriba-Der
-    { id: 2, x: 62, y: 55, mensaje: "Avanzando", fecha: "202X", foto: "img/foto3.jpg" },      // Derecha-Abajo
-    { id: 3, x: 48, y: 65, mensaje: "Profundizando", fecha: "202X", foto: "img/foto4.jpg" },  // Abajo
-    { id: 4, x: 35, y: 52, mensaje: "Creciendo", fecha: "202X", foto: "img/foto5.jpg" },      // Izquierda
-    { id: 5, x: 40, y: 30, mensaje: "Soñando", fecha: "202X", foto: "img/foto6.jpg" },        // Arriba-Izq
-    { id: 6, x: 70, y: 35, mensaje: "Construyendo", fecha: "202X", foto: "img/foto7.jpg" },   // Arriba-Der (Lejos)
-    { id: 7, x: 75, y: 65, mensaje: "Para siempre", fecha: "202X", foto: "img/foto8.jpg" }    // Abajo-Der (Lejos)
+    // Centro (El inicio)
+    { id: 0, x: 50, y: 50, mensaje: "Aquí empezó todo...", fecha: "202X", foto: "img/foto1.webp" },
+    
+    // Empieza el giro corto (sentido horario)
+    { id: 1, x: 58, y: 46, mensaje: "Primeros pasos", fecha: "202X", foto: "img/foto2.webp" },
+    { id: 2, x: 62, y: 56, mensaje: "Avanzando juntos", fecha: "202X", foto: "img/foto3.webp" },
+    
+    // Se abre el arco hacia abajo
+    { id: 3, x: 52, y: 68, mensaje: "Profundizando", fecha: "202X", foto: "img/foto4.webp" },
+    
+    // Curva amplia hacia la izquierda
+    { id: 4, x: 35, y: 60, mensaje: "Momentos difíciles", fecha: "202X", foto: "img/foto5.webp" },
+    
+    // Sube por la izquierda
+    { id: 5, x: 30, y: 40, mensaje: "Superación", fecha: "202X", foto: "img/foto6.webp" },
+    
+    // Arco superior grande
+    { id: 6, x: 50, y: 20, mensaje: "Soñando alto", fecha: "202X", foto: "img/foto7.webp" },
+    
+    // Salida hacia la derecha (Futuro)
+    { id: 7, x: 80, y: 30, mensaje: "Hacia el infinito", fecha: "202X", foto: "img/foto8.webp" }
 ];
 
 let pasoActual = 0;
 let snitchActiva = true;
 let faseVuelo = 1;
-
-// (Las funciones patrullarSnitch, entradaMagica y crearExplosionHumo se quedan igual)
 
 // --- INICIALIZACIÓN ---
 document.addEventListener("DOMContentLoaded", () => {
@@ -24,19 +34,37 @@ document.addEventListener("DOMContentLoaded", () => {
     entradaMagica();
 });
 
+// 1. FONDO DE ESTRELLAS CON SPARKS (CORREGIDO)
 function inicializarEstrellas() {
     particlesJS("particles-js", {
         "particles": {
-            "number": { "value": 100, "density": { "enable": true, "value_area": 800 } },
+            "number": { "value": 80, "density": { "enable": true, "value_area": 800 } },
             "color": { "value": "#ffffff" },
-            "opacity": { "value": 0.8, "random": true },
-            "size": { "value": 3, "random": true },
+            "shape": {
+                "type": "image", // ¡Aquí activamos la imagen!
+                "image": {
+                    // SVG del destello de 4 puntas
+                    "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJ3aGl0ZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTIgMEMxMiAwIDEyLjYgOC44IDI0IDEyQzEyLjYgMTUuMiAxMiAyNCAxMiAyNEMxMiAyNCAxMS40IDE1LjIgMCAxMkMxMS40IDguOCAxMiAwIDEyIDBaIi8+PC9zdmc+",
+                    "width": 100, "height": 100
+                }
+            },
+            "opacity": {
+                "value": 0.8,
+                "random": true,
+                "anim": { "enable": true, "speed": 1, "opacity_min": 0.1, "sync": false }
+            },
+            "size": {
+                "value": 6, // Tamaño aumentado para que se note la forma
+                "random": true,
+                "anim": { "enable": true, "speed": 2, "size_min": 2, "sync": false }
+            },
             "line_linked": { "enable": false },
-            "move": { "enable": true, "speed": 2, "direction": "none", "random": true, "out_mode": "out" }
+            "move": { "enable": true, "speed": 0.5, "direction": "none", "random": true, "straight": false, "out_mode": "out" }
         },
         "interactivity": {
             "detect_on": "canvas",
-            "events": { "onhover": { "enable": true, "mode": "bubble" }, "onclick": { "enable": true, "mode": "push" } }
+            "events": { "onhover": { "enable": true, "mode": "bubble" }, "onclick": { "enable": true, "mode": "push" } },
+            "modes": { "bubble": { "distance": 100, "size": 10, "duration": 2, "opacity": 8, "speed": 3 } }
         },
         "retina_detect": true
     });
@@ -50,15 +78,12 @@ function configurarPergamino() {
         if (!snitchActiva) return;
         snitchActiva = false;
 
-        // 1. Detener y Centrar
         contenedor.style.transform = '';
         contenedor.classList.remove('observando');
         contenedor.classList.add('capturada');
 
-        // 2. Temblor de duda
         setTimeout(() => { contenedor.classList.add('curiosa'); }, 800);
 
-        // 3. Transformación
         setTimeout(() => {
             contenedor.classList.remove('curiosa');
             crearExplosionHumo(contenedor);
@@ -119,21 +144,17 @@ function agregarBotonViaje(contenedor) {
 
 // --- EL VIAJE (WARP SPEED) ---
 function iniciarViajeEstelar() {
-    // 1. Desvanecer pergamino
     const pergamino = document.getElementById('pergamino-contenedor');
     pergamino.style.transition = "opacity 1s ease-out";
     pergamino.style.opacity = 0;
     setTimeout(() => { pergamino.style.display = 'none'; }, 1000);
 
-    // 2. Apagar fondo actual
     const fondoEstrellas = document.getElementById('particles-js');
     fondoEstrellas.style.transition = "opacity 0.5s ease";
     fondoEstrellas.style.opacity = 0;
 
-    // 3. Activar Hiperespacio
     activarHiperespacio(3500);
 
-    // 4. Programar llegada
     setTimeout(() => {
         frenarNave();
     }, 3300);
@@ -169,7 +190,7 @@ function activarHiperespacio(duracion) {
 
         const cx = width / 2, cy = height / 2;
         stars.forEach(star => {
-            star.z -= 25; // Velocidad del warp
+            star.z -= 25;
             if (star.z <= 0) {
                 star.z = width;
                 star.x = Math.random() * width - cx;
@@ -201,22 +222,39 @@ function activarHiperespacio(duracion) {
 
 function frenarNave() {
     console.log("Llegando al destino...");
-    // Re-encender fondo
     const fondoEstrellas = document.getElementById('particles-js');
     setTimeout(() => {
         fondoEstrellas.style.transition = "opacity 2s ease-in";
         fondoEstrellas.style.opacity = 1;
     }, 500);
 
-    // INICIAR CONSTELACIÓN
     iniciarConstelacion();
 }
 
-// --- CONSTELACIÓN EN ESPIRAL ---
+// --- CONSTELACIÓN EN ESPIRAL (CORREGIDO) ---
 function iniciarConstelacion() {
     const contenedor = document.getElementById('contenedor-constelacion');
-    contenedor.innerHTML = '';
 
+    // 1. Preparar el SVG
+    let svg = document.getElementById('svg-lineas');
+    if (!svg) {
+        svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        svg.id = "svg-lineas";
+        contenedor.appendChild(svg);
+    } else {
+        svg.innerHTML = ''; // Limpiar lienzo
+    }
+
+    // 2. Limpiar estrellas viejas
+    const estrellasViejas = document.querySelectorAll('.estrella-historia');
+    estrellasViejas.forEach(e => e.remove());
+
+    // 3. DIBUJAR TODO EL MAPA (Líneas tenues + Estrellas apagadas)
+
+    // Primero las líneas (para que queden al fondo)
+    crearMapaLineas(svg);
+
+    // Luego las estrellas
     historia.forEach((hito, index) => {
         const estrella = document.createElement('div');
         estrella.classList.add('estrella-historia');
@@ -232,14 +270,48 @@ function iniciarConstelacion() {
         contenedor.appendChild(estrella);
     });
 
+    // Encendemos la primera estrella para empezar
     setTimeout(() => { activarEstrella(0); }, 1500);
+}
+
+// NUEVA FUNCIÓN: Dibuja todas las líneas apagadas al inicio
+function crearMapaLineas(svg) {
+    // Recorremos hasta el penúltimo punto para conectar i con i+1
+    for (let i = 0; i < historia.length - 1; i++) {
+        const origen = historia[i];
+        const destino = historia[i + 1];
+
+        const linea = document.createElementNS("http://www.w3.org/2000/svg", "line");
+
+        linea.setAttribute("x1", `${origen.x}%`);
+        linea.setAttribute("y1", `${origen.y}%`);
+        linea.setAttribute("x2", `${destino.x}%`);
+        linea.setAttribute("y2", `${destino.y}%`);
+
+        // Clase base (tenue)
+        linea.classList.add("linea-conexion");
+
+        // Le damos un ID único para encontrarla luego y encenderla
+        linea.id = `linea-${i}`;
+
+        svg.appendChild(linea);
+    }
 }
 
 function activarEstrella(index) {
     if (index >= historia.length) return;
     const estrella = document.getElementById(`estrella-${index}`);
-    estrella.style.transform = "translate(-50%, -50%) scale(1)";
-    estrella.classList.add('activa');
+    if (estrella) {
+        estrella.classList.add('activa');
+    }
+}
+
+// FUNCIÓN MODIFICADA: Ya no crea, solo "Enciende"
+function encenderLinea(indice) {
+    const linea = document.getElementById(`linea-${indice}`);
+    if (linea) {
+        linea.classList.add('activa'); // El CSS hará la transición de color
+    }
 }
 
 function mostrarRecuerdo(dato) {
@@ -260,21 +332,30 @@ function mostrarRecuerdo(dato) {
         popup.classList.remove('abierta');
         setTimeout(() => popup.remove(), 400);
 
+        // Marcar estrella actual como visitada
         const estrellaVieja = document.getElementById(`estrella-${pasoActual}`);
-        estrellaVieja.classList.remove('activa');
-        estrellaVieja.classList.add('visitada');
+        if (estrellaVieja) {
+            estrellaVieja.classList.remove('activa');
+            estrellaVieja.classList.add('visitada');
+        }
 
+        // PREPARAR EL SIGUIENTE PASO
+        const pasoAnterior = pasoActual;
         pasoActual++;
+
         if (pasoActual < historia.length) {
+            // 1. Encendemos el camino (la línea que ya existe)
+            encenderLinea(pasoAnterior);
+
+            // 2. Activamos la siguiente estrella
             activarEstrella(pasoActual);
         } else {
-            // FIN DE LA HISTORIA
-            setTimeout(() => alert("Has recorrido toda nuestra historia... ❤️"), 1000);
+            // setTimeout(() => alert("Has recorrido toda nuestra historia... ❤️"), 1000);
         }
     };
 }
 
-// --- UTILIDADES SNITCH (Movimiento y Humo) ---
+// --- UTILIDADES SNITCH ---
 function patrullarSnitch() {
     if (!snitchActiva) return;
     const snitch = document.getElementById('pergamino-contenedor');

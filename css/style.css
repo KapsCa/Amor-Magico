@@ -19,19 +19,20 @@
     overflow: hidden;
     perspective: 1000px;
 }
+
 /* Clase para el efecto de velocidad luz
 .velocidad-luz {
     /* Estiramos 10 veces en vertical, mantenemos normal en horizontal */
-    /* transform: scaleY(20);  */
-    /* Un poco de desenfoque ayuda a vender el efecto de movimiento */
-    /* filter: blur(2px);
+/* transform: scaleY(20);  */
+/* Un poco de desenfoque ayuda a vender el efecto de movimiento */
+/* filter: blur(2px);
     opacity: 0.8;
     transition: transform 2s cubic-bezier(0.25, 1, 0.5, 1);
 } */
 
 /* Estrellas */
 #particles-js {
-    overflow: hidden; 
+    overflow: hidden;
     transition: opacity 1s ease;
     position: absolute;
     /* Flota sobre el fondo */
@@ -461,27 +462,34 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    
+
     /* Dimensiones del área segura (ajustadas para no tocar bordes) */
-    width: 80%;  /* Un poco más ancho para aprovechar espacio */
-    height: 80%; /* Dejamos margen arriba y abajo */
+    width: 80%;
+    /* Un poco más ancho para aprovechar espacio */
+    height: 80%;
+    /* Dejamos margen arriba y abajo */
 
     /* FLEXBOX: La magia para ordenar verticalmente */
     display: flex;
-    flex-direction: column; /* Uno debajo del otro */
-    justify-content: center; /* Centrar verticalmente todo el bloque */
-    align-items: center; /* Centrar horizontalmente */
+    flex-direction: column;
+    /* Uno debajo del otro */
+    justify-content: center;
+    /* Centrar verticalmente todo el bloque */
+    align-items: center;
+    /* Centrar horizontalmente */
 
     /* Tipografía base */
     font-family: 'Pinyon Script', cursive;
     color: #4a3b2a;
     text-align: center;
-    line-height: 1.4; /* Un poco más apretado para ganar espacio */
-    
+    line-height: 1.4;
+    /* Un poco más apretado para ganar espacio */
+
     /* Importante: si el texto es muy largo en un celular muy pequeño, 
        permitimos scroll interno para no romper el diseño */
-    overflow-y: auto; 
-    scrollbar-width: none; /* Firefox: oculta barra de scroll */
+    overflow-y: auto;
+    scrollbar-width: none;
+    /* Firefox: oculta barra de scroll */
 }
 
 /* Ocultar barra de scroll en Chrome/Safari/Edge */
@@ -493,14 +501,17 @@
 .tinta-magica {
     /* Un brillo dorado suave alrededor de las letras */
     text-shadow: 0 0 5px rgba(255, 215, 0, 0.5), 0 0 10px rgba(255, 215, 0, 0.3);
-    color: #4a3b2a; /* Mantenemos el color sepia base */
+    color: #4a3b2a;
+    /* Mantenemos el color sepia base */
     transition: all 0.5s ease;
 }
 
 /* El botón del viaje */
 .boton-magico {
-    margin-top: 15px; /* Reducimos el espacio fijo */
-    padding: 8px 16px; /* Padding un poco más pequeño */
+    margin-top: 15px;
+    /* Reducimos el espacio fijo */
+    padding: 8px 16px;
+    /* Padding un poco más pequeño */
     font-size: 1.2rem;
     font-family: 'Pinyon Script', cursive;
     color: #4a3b2a;
@@ -508,7 +519,8 @@
     border: 1px solid #4a3b2a;
     border-radius: 5px;
     cursor: pointer;
-    opacity: 0; /* Empieza invisible */
+    opacity: 0;
+    /* Empieza invisible */
     transition: all 1s ease;
     box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
     flex-shrink: 0;
@@ -543,7 +555,7 @@
     width: 100%;
     height: 100%;
     z-index: 500;
-    pointer-events: none; 
+    pointer-events: none;
 }
 
 /* Capa para las líneas que unen las estrellas */
@@ -553,52 +565,99 @@
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 499; /* Justo debajo de las estrellas */
+    z-index: 499;
+    /* Justo debajo de las estrellas */
     overflow: visible;
 }
 
+/* Línea base: El mapa "durmiente" */
 .linea-conexion {
-    stroke: rgba(255, 215, 0, 0.4); /* Línea dorada tenue */
-    stroke-width: 2;
-    stroke-dasharray: 1000;
-    stroke-dashoffset: 1000;
-    animation: dibujarLinea 2s forwards;
+    stroke: #4a5a6a;
+    /* Gris azulado oscuro, igual que las estrellas apagadas */
+    stroke-width: 1px;
+    /* Más finas mientras duermen */
+    opacity: 0.3;
+    /* Tenues */
+
+    /* Transición suave para cuando se enciendan */
+    transition: all 1.5s ease-in-out;
 }
 
-@keyframes dibujarLinea {
-    to { stroke-dashoffset: 0; }
+/* Estado: Iluminada (Cuando pasas por ahí) */
+.linea-conexion.activa {
+    stroke: #ffd700;
+    /* Oro brillante */
+    stroke-width: 2px;
+    /* Se engrosan un poco */
+    opacity: 1;
+
+    /* Un brillo mágico alrededor de la línea */
+    filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.8));
 }
+
+
 
 /* NUEVO DISEÑO: SPARK (Destello) */
+/* Estado Base: Constelación "Durmiente" */
 .estrella-historia {
     position: absolute;
-    width: 30px; /* Un poco más grandes para que luzca la forma */
+    width: 30px;
     height: 30px;
-    background: white;
-    
-    /* ESTO CREA LA FORMA DE DESTELLO DE 4 PUNTAS */
+
+    /* CAMBIO 1: Color oscuro para diferenciarlas del fondo (Gris Azulado) */
+    background: #4a5a6a;
+
+    /* CAMBIO 2: Casi imperceptibles */
+    opacity: 0.3;
+
+    /* Forma de Spark */
     clip-path: polygon(50% 0%, 60% 40%, 100% 50%, 60% 60%, 50% 100%, 40% 60%, 0% 50%, 40% 40%);
-    
+
     cursor: pointer;
+    /* Opcional: ¿Quieres que se pueda hacer clic antes de tiempo? */
     pointer-events: auto;
-    transform: translate(-50%, -50%) scale(0);
-    
-    /* El box-shadow no funciona con clip-path, usamos filter */
-    filter: drop-shadow(0 0 5px white);
-    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+    /* CAMBIO 3: Ya no escala 0, sino escala normal (están presentes) */
+    transform: translate(-50%, -50%) scale(0.8);
+
+    /* Sin brillo todavía */
+    filter: drop-shadow(0 0 0 transparent);
+
+    transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-/* Estado: Activa (latido más intenso) */
+/* Hover sutil para las estrellas durmientes (Opcional) */
+.estrella-historia:hover {
+    opacity: 0.6;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+/* Estado: Activa (Iluminada) */
 .estrella-historia.activa {
+    /* Recuperan el color dorado brillante */
     background: #ffd700;
+    opacity: 1;
+
+    /* Brillo intenso */
     filter: drop-shadow(0 0 10px #ffd700);
     z-index: 502;
+
+    /* Crecen un poco al encenderse */
+    transform: translate(-50%, -50%) scale(1.2);
+
     animation: latidoSpark 1.5s infinite alternate;
 }
 
 @keyframes latidoSpark {
-    0% { transform: translate(-50%, -50%) scale(1); filter: drop-shadow(0 0 5px #ffd700); }
-    100% { transform: translate(-50%, -50%) scale(1.4); filter: drop-shadow(0 0 15px #ffd700); }
+    0% {
+        transform: translate(-50%, -50%) scale(1);
+        filter: drop-shadow(0 0 5px #ffd700);
+    }
+
+    100% {
+        transform: translate(-50%, -50%) scale(1.4);
+        filter: drop-shadow(0 0 15px #ffd700);
+    }
 }
 
 /* Estado: Visitada */
@@ -624,7 +683,7 @@
     z-index: 1000;
     color: #fff;
     text-align: center;
-    box-shadow: 0 0 50px rgba(0,0,0,0.8);
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
     transition: transform 0.4s ease;
     pointer-events: auto;
 }
@@ -639,7 +698,7 @@
     object-fit: cover;
     border-radius: 10px;
     margin-bottom: 15px;
-    border: 1px solid rgba(255,255,255,0.2);
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .tarjeta-recuerdo h3 {
@@ -669,21 +728,25 @@
 }
 
 .cerrar-tarjeta:hover {
-    background: rgba(255,255,255,0.2);
+    background: rgba(255, 255, 255, 0.2);
 }
 
 /* --- RESPONSIVIDAD (MÓVILES) --- */
 @media (max-width: 600px) {
+
     /* Hacemos el pergamino más ancho en móviles para tener más espacio */
     #pergamino-contenedor.pergamino-abierto {
-        width: 95vw !important; /* Casi todo el ancho de la pantalla */
-        height: 70vh !important; /* Un poco menos alto para que no tape todo */
+        width: 95vw !important;
+        /* Casi todo el ancho de la pantalla */
+        height: 70vh !important;
+        /* Un poco menos alto para que no tape todo */
     }
 
     /* Reducimos la letra del mensaje */
     #mensaje-carta {
-        font-size: 2rem; 
-        width: 85%; /* Usamos más ancho del papel */
+        font-size: 2rem;
+        width: 85%;
+        /* Usamos más ancho del papel */
         height: 85%;
     }
 
