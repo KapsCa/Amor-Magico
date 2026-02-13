@@ -19,9 +19,20 @@
     overflow: hidden;
     perspective: 1000px;
 }
+/* Clase para el efecto de velocidad luz
+.velocidad-luz {
+    /* Estiramos 10 veces en vertical, mantenemos normal en horizontal */
+    /* transform: scaleY(20);  */
+    /* Un poco de desenfoque ayuda a vender el efecto de movimiento */
+    /* filter: blur(2px);
+    opacity: 0.8;
+    transition: transform 2s cubic-bezier(0.25, 1, 0.5, 1);
+} */
 
 /* Estrellas */
 #particles-js {
+    overflow: hidden; 
+    transition: opacity 1s ease;
     position: absolute;
     /* Flota sobre el fondo */
     top: 0;
@@ -84,7 +95,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%) rotate(-30deg) scale(0);
-    width: 300px;
+    width: 180px;
     height: auto;
 
     opacity: 0;
@@ -145,6 +156,7 @@
 .estado-abierto #hoja-abierta {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
+    z-index: 301;
     /* Tamaño real */
 }
 
@@ -327,8 +339,8 @@
 
 /* ESTADO 1: El rollo cerrado */
 #pergamino-contenedor.pergamino-cerrado {
-    width: 300px !important;
-    height: 300px !important;
+    width: 180px !important;
+    height: 180px !important;
 
     /* TU IMAGEN DEL ROLLO */
     background-image: url('../img/pergamino_cerrado.png');
@@ -443,36 +455,69 @@
     }
 }
 
-/* --- EL CONTENIDO DE LA CARTA --- */
 #mensaje-carta {
     position: absolute;
-    top: 15%;
-    /* Margen superior para librar el borde del papel */
-    left: 15%;
-    /* Márgenes laterales */
-    width: 70%;
-    height: 70%;
+    /* Centrado perfecto relativo al pergamino */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+    /* Dimensiones del área segura (ajustadas para no tocar bordes) */
+    width: 80%;  /* Un poco más ancho para aprovechar espacio */
+    height: 80%; /* Dejamos margen arriba y abajo */
 
-    /* Tipografía mágica */
+    /* FLEXBOX: La magia para ordenar verticalmente */
+    display: flex;
+    flex-direction: column; /* Uno debajo del otro */
+    justify-content: center; /* Centrar verticalmente todo el bloque */
+    align-items: center; /* Centrar horizontalmente */
+
+    /* Tipografía base */
     font-family: 'Pinyon Script', cursive;
-    font-size: 2rem;
-    /* Tamaño legible */
     color: #4a3b2a;
-    /* Color tinta sepia/café */
     text-align: center;
-    /* O 'justify' si es mucho texto */
-    line-height: 1.6;
+    line-height: 1.4; /* Un poco más apretado para ganar espacio */
+    
+    /* Importante: si el texto es muy largo en un celular muy pequeño, 
+       permitimos scroll interno para no romper el diseño */
+    overflow-y: auto; 
+    scrollbar-width: none; /* Firefox: oculta barra de scroll */
+}
 
-    /* Oculto al principio */
-    opacity: 0;
-    transition: opacity 1s ease-in;
-    z-index: 200;
+/* Ocultar barra de scroll en Chrome/Safari/Edge */
+#mensaje-carta::-webkit-scrollbar {
+    display: none;
+}
 
-    /* Para que el texto largo no se salga */
-    overflow-y: auto;
+/* Efecto de tinta mágica */
+.tinta-magica {
+    /* Un brillo dorado suave alrededor de las letras */
+    text-shadow: 0 0 5px rgba(255, 215, 0, 0.5), 0 0 10px rgba(255, 215, 0, 0.3);
+    color: #4a3b2a; /* Mantenemos el color sepia base */
+    transition: all 0.5s ease;
+}
 
-    /* Personalización de la barra de scroll (opcional, estilo invisible) */
-    scrollbar-width: none;
+/* El botón del viaje */
+.boton-magico {
+    margin-top: 15px; /* Reducimos el espacio fijo */
+    padding: 8px 16px; /* Padding un poco más pequeño */
+    font-size: 1.2rem;
+    font-family: 'Pinyon Script', cursive;
+    color: #4a3b2a;
+    background: rgba(255, 255, 255, 0.3);
+    border: 1px solid #4a3b2a;
+    border-radius: 5px;
+    cursor: pointer;
+    opacity: 0; /* Empieza invisible */
+    transition: all 1s ease;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+    flex-shrink: 0;
+}
+
+.boton-magico:hover {
+    background: rgba(255, 215, 0, 0.2);
+    transform: scale(1.1);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
 }
 
 /* --- NUEVO ESTADO: MODO LECTURA --- */
@@ -486,4 +531,26 @@
     z-index: 200 !important;
     /* Transición suave para que el "zoom out" se vea elegante */
     transition: transform 1s ease-in-out;
+}
+/* --- RESPONSIVIDAD (MÓVILES) --- */
+@media (max-width: 600px) {
+    /* Hacemos el pergamino más ancho en móviles para tener más espacio */
+    #pergamino-contenedor.pergamino-abierto {
+        width: 95vw !important; /* Casi todo el ancho de la pantalla */
+        height: 70vh !important; /* Un poco menos alto para que no tape todo */
+    }
+
+    /* Reducimos la letra del mensaje */
+    #mensaje-carta {
+        font-size: 2rem; 
+        width: 85%; /* Usamos más ancho del papel */
+        height: 85%;
+    }
+
+    /* Ajustamos el botón para dedos táctiles */
+    .boton-magico {
+        font-size: 1rem;
+        padding: 10px 20px;
+        margin-top: 10px;
+    }
 }

@@ -37,28 +37,28 @@ function configurarPergamino() {
 
         // 1. DETENER Y CENTRAR (Zoom)
         // Limpiamos la transformación de vuelo para que el CSS tome el control
-        contenedor.style.transform = ''; 
+        contenedor.style.transform = '';
         contenedor.classList.remove('observando'); // Quitamos el aleteo de vuelo
         contenedor.classList.add('capturada'); // Zoom al 150% y centrado
-        
+
         console.log("¡Atrapada! Centrando...");
 
         // 2. LA DUDA (Opcional pero recomendado)
         // 800ms después de atraparla, empieza a temblar
         setTimeout(() => {
-             contenedor.classList.add('curiosa');
+            contenedor.classList.add('curiosa');
         }, 800);
 
         // 3. LA TRANSFORMACIÓN (2 segundos después del click)
         setTimeout(() => {
             console.log("¡Transformación!");
-            
+
             // Quitamos el temblor antes de explotar
             contenedor.classList.remove('curiosa');
 
             // FASE 1: Puf de humo y Snitch desaparece
             crearExplosionHumo(contenedor);
-            contenedor.classList.add('estado-captura'); 
+            contenedor.classList.add('estado-captura');
 
             // FASE 2: Aparece el Rollo (200ms después del humo)
             setTimeout(() => {
@@ -68,11 +68,11 @@ function configurarPergamino() {
             // FASE 3: Se abre la hoja (1.5s después para que luzca el rollo)
             setTimeout(() => {
                 // CAMBIO DE ZOOM: De gigante (captura) a normal (lectura)
-                contenedor.classList.remove('capturada'); 
-                contenedor.classList.add('modo-lectura'); 
-                
+                contenedor.classList.remove('capturada');
+                contenedor.classList.add('modo-lectura');
+
                 // Transición visual a hoja abierta
-                contenedor.classList.add('estado-abierto'); 
+                contenedor.classList.add('estado-abierto');
 
                 // Iniciar escritura del texto
                 const divTexto = document.getElementById('mensaje-carta');
@@ -80,11 +80,11 @@ function configurarPergamino() {
                     escribirMensaje(divTexto);
                 }, 1000);
 
-            }, 1500); 
+            }, 1500);
 
         }, 2000); // TIEMPO TOTAL DE LA SNITCH ATRAPADA (2 segundos)
     });
-}
+} 1
 
 function patrullarSnitch() {
     // Si la snitch ya no está activa, salimos de la función inmediatamente
@@ -171,21 +171,21 @@ function crearExplosionHumo(target) {
         setTimeout(() => humo.remove(), 800);
     }
 }
-// Función para el efecto de máquina de escribir
-function escribirMensaje(elemento) {
-    // 💌 TU MENSAJE AQUÍ 💌
-    // Usa \n para saltos de línea
-    const mensaje = "Juro solemnemente que mis intenciones no son buenas...\n\n¿Quieres ser mi San Valentín?\n\nTravesura Realizada.";
 
-    elemento.style.opacity = 1; // Hacemos visible el contenedor
-    elemento.innerHTML = ""; // Limpiamos por si acaso
+function escribirMensaje(elemento) {
+    const mensaje = "Se dice que cuando miras a las estrellas,\nmiras el pasado...\n\nY en ellas vive nuestra historia.\n\n¿Quieres verla?";
+
+    elemento.style.opacity = 1;
+    elemento.innerHTML = "";
+
+    // Agregamos la clase de magia al contenedor del texto
+    elemento.classList.add('tinta-magica');
 
     let i = 0;
-    const velocidad = 50; // Milisegundos por letra (ajusta para más rápido/lento)
+    const velocidad = 100; // 🐢 Más lento y solemne
 
     function escribir() {
         if (i < mensaje.length) {
-            // Si es un salto de línea, usamos <br>, si no, la letra
             if (mensaje.charAt(i) === '\n') {
                 elemento.innerHTML += '<br>';
             } else {
@@ -193,10 +193,161 @@ function escribirMensaje(elemento) {
             }
             i++;
             setTimeout(escribir, velocidad);
+        } else {
+            // Cuando termina de escribir, llamamos al botón
+            agregarBotonViaje(elemento);
         }
     }
 
     escribir();
+}
+
+function agregarBotonViaje(contenedor) {
+    const boton = document.createElement('button'); // Usar etiqueta button es mejor práctica
+    boton.innerHTML = "✨ Mirar al Pasado ✨";
+    boton.className = "boton-magico";
+
+    // Función del click (la definiremos en el siguiente paso)
+    boton.onclick = function () {
+        console.log("Iniciando viaje estelar...");
+        iniciarViajeEstelar();
+    };
+
+    contenedor.appendChild(boton);
+
+    // Pequeño truco para que la transición de opacidad funcione
+    // Necesitamos un micro-retraso para que el navegador registre que el elemento existe antes de cambiar su opacidad
+    setTimeout(() => {
+        boton.style.opacity = 1;
+    }, 100);
+}
+
+function iniciarViajeEstelar() {
+    // 1. Desvanecer el pergamino
+    const pergamino = document.getElementById('pergamino-contenedor');
+    pergamino.style.transition = "opacity 1s ease-out";
+    pergamino.style.opacity = 0;
+    setTimeout(() => { pergamino.style.display = 'none'; }, 1000);
+
+    // 2. APAGAR EL FONDO (NUEVO) 🌑
+    // Ocultamos las estrellas viejas para que no estorben al viaje
+    const fondoEstrellas = document.getElementById('particles-js');
+    fondoEstrellas.style.transition = "opacity 0.5s ease"; // Transición rápida
+    fondoEstrellas.style.opacity = 0;
+
+    // 3. ACTIVAR EL HIPERESPACIO
+    activarHiperespacio(3000);
+
+    // 4. PROGRAMAR LA LLEGADA
+    setTimeout(() => {
+        frenarNave();
+    }, 2800);
+}
+
+function frenarNave() {
+    console.log("Llegando al destino...");
+
+    // 1. RE-ENCENDER EL FONDO (NUEVO) ✨
+    const fondoEstrellas = document.getElementById('particles-js');
+    // Le damos tiempo al canvas del warp para desaparecer antes de mostrar el fondo
+    setTimeout(() => {
+        fondoEstrellas.style.transition = "opacity 2s ease-in"; // Aparecen suavemente
+        fondoEstrellas.style.opacity = 1;
+    }, 500);
+
+    // 2. Aquí llamaremos a la función que dibuja la constelación
+    // iniciarConstelacion(); 
+}
+
+function activarHiperespacio(duracion = 3000) {
+    const canvas = document.createElement('canvas');
+    canvas.id = 'warp-canvas';
+    Object.assign(canvas.style, {
+        position: 'fixed', top: 0, left: 0, width: '100%', height: '100%',
+        zIndex: 9999, pointerEvents: 'none', background: 'transparent',
+        opacity: 0, transition: 'opacity 0.5s ease' // Transición suave al aparecer
+    });
+    document.body.appendChild(canvas);
+
+    // Fade in suave
+    requestAnimationFrame(() => canvas.style.opacity = 1);
+
+    const ctx = canvas.getContext('2d');
+    let width, height, cx, cy;
+
+    const resize = () => {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+        cx = width / 2; cy = height / 2;
+    };
+    window.addEventListener('resize', resize);
+    resize();
+
+    const stars = [];
+    const numStars = 200;
+    const speed = 20;
+
+    for (let i = 0; i < numStars; i++) {
+        stars.push({
+            x: Math.random() * width - cx,
+            y: Math.random() * height - cy,
+            z: Math.random() * width
+        });
+    }
+
+    let animationId;
+
+    function draw() {
+        // TRUCO DE TRANSPARENCIA:
+        // Borramos suavemente el frame anterior dejando ver el CSS de fondo
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+        ctx.fillRect(0, 0, width, height);
+
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.fillStyle = '#ffffff'; // Color de las estrellas
+
+        stars.forEach(star => {
+            star.z -= speed;
+
+            if (star.z <= 0) {
+                star.z = width;
+                star.x = Math.random() * width - cx;
+                star.y = Math.random() * height - cy;
+            }
+
+            const k = 128.0 / star.z;
+            const px = star.x * k + cx;
+            const py = star.y * k + cy;
+            const size = (1 - star.z / width) * 4;
+
+            if (px >= 0 && px <= width && py >= 0 && py <= height) {
+                ctx.beginPath();
+                const oldX = (star.x * (128.0 / (star.z + speed * 1.5))) + cx;
+                const oldY = (star.y * (128.0 / (star.z + speed * 1.5))) + cy;
+
+                ctx.strokeStyle = `rgba(255, 255, 255, ${1 - star.z / width})`; // Fade in por distancia
+                ctx.lineWidth = size;
+                ctx.moveTo(oldX, oldY);
+                ctx.lineTo(px, py);
+                ctx.stroke();
+            }
+        });
+
+        animationId = requestAnimationFrame(draw);
+    }
+
+    draw();
+
+    // Limpieza al terminar
+    setTimeout(() => {
+        canvas.style.opacity = 0; // Fade out suave
+        setTimeout(() => {
+            cancelAnimationFrame(animationId);
+            canvas.remove();
+            window.removeEventListener('resize', resize);
+        }, 500);
+    }, duracion);
 }
 
 document.addEventListener("DOMContentLoaded", () => {
