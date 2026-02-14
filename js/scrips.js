@@ -1,26 +1,21 @@
 // --- CONFIGURACIÓN DE LA HISTORIA (ESPIRAL SUAVE) ---
 const historia = [
     // Centro (El inicio)
-    { id: 0, x: 50, y: 50, mensaje: "Aquí empezó todo...", fecha: "202X", foto: "img/foto1.webp" },
-    
+    { id: 0, x: 50, y: 50, mensaje: "Al principio no parecía que fuera a durar...", fecha: "2015", foto: "../img/festejo2015.webp" },
     // Empieza el giro corto (sentido horario)
-    { id: 1, x: 58, y: 46, mensaje: "Primeros pasos", fecha: "202X", foto: "img/foto2.webp" },
-    { id: 2, x: 62, y: 56, mensaje: "Avanzando juntos", fecha: "202X", foto: "img/foto3.webp" },
-    
+    { id: 1, x: 63, y: 45, mensaje: "Pero siempre fuiste alguien especial para mí", fecha: "2016", foto: "../img/quinceaños.webp" },
+    { id: 2, x: 68, y: 55, mensaje: "Mientras más tiempo pasaba cada vez más me gustaba la idea de estar contigo", fecha: "2018", foto: "../img/musevi.webp" },
     // Se abre el arco hacia abajo
-    { id: 3, x: 52, y: 68, mensaje: "Profundizando", fecha: "202X", foto: "img/foto4.webp" },
-    
+    { id: 3, x: 55, y: 65, mensaje: "A pesar de que no siempre soy el más romántico ", fecha: "2019", foto: "../img/fiesta2019.webp" },
     // Curva amplia hacia la izquierda
-    { id: 4, x: 35, y: 60, mensaje: "Momentos difíciles", fecha: "202X", foto: "img/foto5.webp" },
-    
+    { id: 4, x: 38, y: 60, mensaje: "Me encanta cuando veo tu carita de sorpresa cuando te regalo algo", fecha: "202X", foto: "../img/besohamaca.webp" },
     // Sube por la izquierda
-    { id: 5, x: 30, y: 40, mensaje: "Superación", fecha: "202X", foto: "img/foto6.webp" },
-    
+    { id: 5, x: 32, y: 45, mensaje: "Me encanta cuando me dices te amo", fecha: "2023", foto: "../img/navidad.webp" },
     // Arco superior grande
-    { id: 6, x: 50, y: 20, mensaje: "Soñando alto", fecha: "202X", foto: "img/foto7.webp" },
-    
+    { id: 6, x: 40, y: 35, mensaje: "Amo cada parte de ti", fecha: "2024", foto: "../img/bodaabues.webp" },
+    { id: 7, x: 60, y: 30, mensaje: "Cada momento que no trajo hasta aquí", fecha: "2025", foto: "../img/graduacion.webp" },
     // Salida hacia la derecha (Futuro)
-    { id: 7, x: 80, y: 30, mensaje: "Hacia el infinito", fecha: "202X", foto: "img/foto8.webp" }
+    { id: 8, x: 83, y: 40, mensaje: "Y todo lo que aún tenemos por vivir...", fecha: "2025", foto: "../img/graduacion2.webp" }
 ];
 
 let pasoActual = 0;
@@ -33,6 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
     configurarPergamino();
     entradaMagica();
 });
+
 
 // 1. FONDO DE ESTRELLAS CON SPARKS (CORREGIDO)
 function inicializarEstrellas() {
@@ -317,6 +313,20 @@ function encenderLinea(indice) {
 function mostrarRecuerdo(dato) {
     const popup = document.createElement('div');
     popup.classList.add('tarjeta-recuerdo');
+
+    // 1. CALCULAR EL ORIGEN DEL ZOOM 📐
+    // Como las coordenadas de la historia están en %, necesitamos convertirlas
+    // a una posición relativa al centro de la pantalla para el 'transform'
+
+    // (dato.x - 50) nos da la distancia desde el centro en porcentaje
+    // Multiplicamos por el ancho de la ventana (window.innerWidth) para pixeles aproximados
+    const distanciaX = (dato.x - 50) + "vw";
+    const distanciaY = (dato.y - 50) + "vh";
+
+    // Pasamos estas distancias al CSS como variables
+    popup.style.setProperty('--origen-x', distanciaX);
+    popup.style.setProperty('--origen-y', distanciaY);
+
     popup.innerHTML = `
         <h3>${dato.fecha}</h3>
         <img src="${dato.foto}" alt="Recuerdo">
@@ -325,12 +335,15 @@ function mostrarRecuerdo(dato) {
     `;
     document.body.appendChild(popup);
 
-    setTimeout(() => popup.classList.add('abierta'), 10);
+    // Pequeño delay para permitir que el navegador lea la posición inicial antes de animar
+    requestAnimationFrame(() => {
+        setTimeout(() => popup.classList.add('abierta'), 10);
+    });
 
     const botonCerrar = popup.querySelector('.cerrar-tarjeta');
     botonCerrar.onclick = () => {
         popup.classList.remove('abierta');
-        setTimeout(() => popup.remove(), 400);
+        setTimeout(() => popup.remove(), 600); // Esperamos a que termine la animación de vuelta
 
         // Marcar estrella actual como visitada
         const estrellaVieja = document.getElementById(`estrella-${pasoActual}`);
@@ -339,18 +352,15 @@ function mostrarRecuerdo(dato) {
             estrellaVieja.classList.add('visitada');
         }
 
-        // PREPARAR EL SIGUIENTE PASO
+        // AVANCE EN LA HISTORIA
         const pasoAnterior = pasoActual;
         pasoActual++;
 
         if (pasoActual < historia.length) {
-            // 1. Encendemos el camino (la línea que ya existe)
-            encenderLinea(pasoAnterior);
-
-            // 2. Activamos la siguiente estrella
+            encenderLinea(pasoAnterior); // Asegúrate de tener esta función o usar conectarEstrellas
             activarEstrella(pasoActual);
         } else {
-            // setTimeout(() => alert("Has recorrido toda nuestra historia... ❤️"), 1000);
+            setTimeout(() => alert("Feliz dia del Amor \n Al amor de mi vida... ❤️"), 1000);
         }
     };
 }
